@@ -253,7 +253,22 @@ _{more aspects and alternatives to be added}_
 
 ### \[Proposed\] Data archiving
 
-_{Explain here how the data archiving feature will be implemented}_
+#### Proposed Implementation
+
+The proposed data archiving mechanism is facilitated by `ArchiveAddressBookStorage`. It implements `AddressBookStorage` with an option to store as `JSON` or `CSV`
+* `ArchiveAddressBookStorage#StoreJSON()` — Saves the current intern book in `JSON` format.
+* `ArchiveAddressBookStorage#StoreCSV()` — Saves the current intern book in `CSV` format.
+
+
+These operations are exposed in the `Storage` interface as `Storage#StoreJSON()` and `Storage#StoreCSV()`.
+
+Given below is an example usage scenario and how the data archiving mechanism behaves at each step.
+
+Step 1. The user launches the application for the first time. The `ArchiveAddressBookStorage` will be initialized with the initial intern book state.
+
+
+Step 2. The user executes `Archive JSON` command to archive the active InternBook by calling the `Storage#StoreJSON` method. 
+
 
 
 --------------------------------------------------------------------------------------------------------------------
