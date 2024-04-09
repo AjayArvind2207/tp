@@ -22,11 +22,11 @@ It is optimized for a _Command Line Interface_ (CLI), but you can still use the 
 
 > **IMPORTANT**
 > Ensure you have Java `11`  installed in your computer. If you do not have it installed, download it from [here.](https://www.oracle.com/sg/java/technologies/javase/jdk11-archive-downloads.html)
-1. Download the latest `internbook.jar` from [here](https://github.com/AY2324S2-CS2103T-T13-2/tp/releases).
+1. Download the latest `internBook.jar` from [here](https://github.com/AY2324S2-CS2103T-T13-2/tp/releases).
 
-2. Copy the file to the folder you want to use as the _home folder_ for your Internbook.
+2. Copy the file to the folder you want to use as the _home folder_ for your InternBook.
 
-3. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar internbook.jar` command to run the application.
+3. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar internBook.jar` command to run the application.
 > **TIP**
 > If you are struggling to figure out the path to `cd` into, you can use the File Explorer in your OS to copy the file path and directly `cd` to that.<br><br>
 
@@ -103,7 +103,7 @@ Format: `help`
 
 ### Adding a company: `add`
 
-Adds a company to the address book.
+Adds a company to the InternBook.
 
 Format: `add -n COMPANY -e EMAIL -t TAG…​ [-p PHONE_NUMBER] [-d1 START_DATE] [-d2 END_DATE]`
 
@@ -118,13 +118,13 @@ Examples:
 
 ### Listing all companies : `list`
 
-Shows a list of all companies in the address book.
+Shows a list of all companies in the InternBook.
 
 Format: `list`
 
 ### Editing a company : `edit`
 
-Edits an existing company in the address book.
+Edits an existing company in the InternBook.
 
 Format: `edit INDEX [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-t TAG…]​ [-d1 START_DATE] [-d2 END_DATE]`
 
@@ -159,7 +159,7 @@ Examples:
 
 ### Deleting a company : `delete`
 
-Deletes the specified company from the address book.
+Deletes the specified company from the InternBook.
 
 Format: `delete INDEX`
 
@@ -195,7 +195,7 @@ InternBook data are saved automatically as a JSON file `[JAR file location]/data
 
 **Caution:**
 If your changes to the data file makes its format invalid, InternBook will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+Furthermore, certain edits can cause the InternBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
 ### Marking a company : `mark`
@@ -263,7 +263,7 @@ _Details coming soon ..._
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous InternBook home folder.
 
 **Q**: How do I check if I am on JDK 11?<br>
 **A**: For MAC users, open up your **Terminal**, and for Windows users, open up your **Command Prompt**.
