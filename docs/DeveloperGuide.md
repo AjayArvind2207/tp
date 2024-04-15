@@ -142,7 +142,7 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2324S2-CS2103T-T13-2/tp/blob/master/src/main/java/seedu/address/storage/Storage.java)
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
@@ -165,7 +165,7 @@ This section describes some noteworthy details on how certain features are imple
 
 #### Implementation
 The reminder feature is supported by the `Reminder` class, which is associated with the `Days` and `ReminderOnOff` class.
-`Reminder` class keeps track of two values which are `days` and `reminderOnOff`. \
+`Reminder` class keeps track of two values which are `days` and `reminderOnOff`.
 * `days` - A `Days` type that keeps track of the number of days, the user input, from the end date of an application.
 * `reminderOnOff` - A `ReminderOnOff` type that keeps track whether the reminder feature is on or off.
 
@@ -271,6 +271,39 @@ The sequence diagram below traces the pathway of the edit command within the `Lo
 
 <puml src="diagrams/EditSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `edit 1 -n ABC` Command" />
 
+### Application `date` property
+
+#### Implementation
+
+The date property enables users to keep track of application start and end dates. End dates must be the same or later than start dates.
+
+The implementation of this property is similar to the other properties present in the company entity. The difference lies in the link between start and end dates. 
+
+Below are some of the design choices made, as well as alternative implementations possible.
+
+#### Design choices
+1. Start and end dates are represented with the same type.\
+The company entity contains 2 date entities for start and end dates.
+<puml src="diagrams/CompanyObjectDiagram.puml" alt="Object diagram representing the date property in company" /> 
+The following alternative implementations explored:
+    * Have a date range class that represents both the start and end date
+      * Pros: Easier checking of constraints that apply on both the start and end date
+      * Cons: Low extensibility. Potentially high coupling between company and date property.
+
+2. [!IMPORTANT] Checks on constraints that apply to both start and end dates are handled outside the company class, at the point of Date object creation.
+    Since the company constructor does not currently throw any exceptions, it would require a huge refactor to enable constraint checks within the constructor.\
+**Hence, the responsibility lies on the caller to check that the start and end dates provided to the company are correct.**
+
+<puml src="diagrams/AddDateCheckSequenceDiagram.puml" alt="Sequence diagram for date checks in Add Command" />
+
+The above diagram shows that the checks are called by the AddCommandParser object.
+
+<puml src="diagrams/EditDateCheckSequenceDiagram.puml" alt="Sequence diagram for date checks in Edit Command" />
+
+The above diagram shows that the checks are called by the EditCommand instead of the EditCommandParser.
+
+This is admittedly a design flaw that will cause issues when new commands are added. As such, in future implementations, the checks should be done within the company class to ensure that companies cannot be created with dates that violate the constraints.
+
 
 ### Sort Feature
 
@@ -310,7 +343,7 @@ The following sequence diagram shows how sort operation is executed:
 
 <puml src="diagrams/SortSequenceDiagram.puml" alt="Sequence diagram of SortCommand" />
 
-### Design considerations:
+#### Design considerations:
 **Aspect: Extensibility:**
 
 Support for Future Enhancements:
@@ -326,6 +359,70 @@ Support for Future Enhancements:
 * Alternative 3: Introduce a dynamic sorting configuration where users can define custom sorting criteria through a configuration file or user interface.
     * Pros: Highly customizable, allows users to define sorting criteria based on their specific needs.
     * Cons: Increased complexity in implementation and management, potential challenges in ensuring user-friendly configuration interfaces.
+
+
+### Mark/Unmark feature
+
+#### Implementation
+
+The mark/unmark mechanism is facilitated in two parts, the first by the `MarkCommandParser`, and then the `MarkCommand` and `UnmarkCommand` which extends the `Command` abstract class.
+These commands allow users to mark and unmark companies, respectively, to keep track of their application status and interest.
+
+Both commands interact with the Model and Company classes to update the application status of a company.
+
+The following operations are implemented to support the Mark and Unmark feature:
+
+* `ModelManager#markCompany(Company company)` — Updates the isMarked attribute of the specified Company object to true.
+* `ModelManager#unmarkCompany(Company company)` — Updates the isMarked attribute of the specified Company object to false.
+* `ModelManager#isCompanyMarked(Company company)` — Returns true if the specified Company object is marked, and false otherwise.
+
+These operations are exposed in the Model interface and are used by the MarkCommand and UnmarkCommand classes to modify the application status of a company.
+The `mark()` and `unmark()` methods in the Company class are also used to update the checkbox in the CompanyCard class to reflect the application status in the UI.
+
+Given below is an example usage scenario and how the mark/unmark mechanism behaves at each step.
+
+Step 1. The user launches the application for the first time. The ModelManager will be initialized with the initial intern book state.
+
+Step 2. The user executes `mark 1` command to mark the 1st company in the InternBook.
+
+Step 3. The `LogicManager` class will parse the user input and create a `MarkCommand` object with the index of the company to be marked.
+
+Step 4. The `MarkCommand` class extracts the `Company` object at the specified index from the ModelManager.
+
+Step 5. The `MarkCommand` class calls the `markCompany(Company company)` method of the ModelManager, passing the extracted `Company` object as a parameter.
+
+Step 6. The `ModelManager` class updates the `isMarked` attribute of the specified `Company` object to `true`.
+
+Step 7. The `CompanyCard` class updates the checkbox in the UI by using the method `checkboxIsMarked()` in the Company class to reflect the marked status of the company.
+
+Step 8. The `ModelManager` class updates the filtered company list in the ModelManager to reflect the changes made to the `Company` object.
+
+Step 9. The `MarkCommand` class returns a `CommandResult` object with a success message to the `LogicManager`.
+
+Step 10. The `LogicManager` class updates the `ResultDisplay` in the UI with the success message.
+
+The sequence diagram below shows how the MarkCommand executes the mark operation within the Logic component:
+
+<puml src="diagrams/MarkSequenceDiagram.uml" width="550">
+
+The activity diagram below summarizes the process of marking a company:
+
+<puml src="diagrams/MarkActivityDiagram.puml" width="550" />
+
+The Unmark feature follows a similar process, with the `UnmarkCommand` class calling the `unmarkCompany(Company company)` method of the ModelManager to update the `isMarked` attribute of the specified `Company` object to `false`.
+
+#### Design considerations:
+**Aspect: How mark/unmark executes:**
+
+* **Alternative 1 (current choice):** Uses a boolean attribute in the `Company` class to track the application status.
+    * Pros: This approach keeps all company data within a single list, making it easier to manage and update the application status.
+    * Cons: May not be suitable for more complex application status tracking requirements.
+* **Alternative 2:** Uses a separate `Mark` class to track the application status.
+    * Pros: Allows for more complex application status tracking requirements.
+    * Cons: May require additional classes and methods to manage the application status, making it more complex to implement and maintain.
+
+We chose Alternative 1 because it is simpler to implement and maintain, and meets the current requirements for tracking the application status of companies.
+
 
 
 ### \[Proposed\] Undo/redo feature
@@ -443,7 +540,7 @@ Step 2. The user executes `Archive JSON` command to archive the active InternBoo
 
 --------------------------------------------------------------------------------------------------------------------
 
-## **Documentation, logging, testing, configuration, dev-ops**
+## **Documentation, testing, logging, configuration, dev-ops**
 
 * [Documentation guide](Documentation.md)
 * [Testing guide](Testing.md)
@@ -473,15 +570,19 @@ Step 2. The user executes `Archive JSON` command to archive the active InternBoo
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                  | I want to …​           | So that I can…​                                                        |
-|----------|------------------------------------------|------------------------|------------------------------------------------------------------------|
-| `* * *`  | user                                     | add details of company | easily keep track of companies I am interested in                      |
-| `* * *`  | user                                     | list companies added   | view all the companies that I am currently interested in               |
-| `* * *`  | user                                     | delete a company       | remove company that I am no longer interested in                       |
-| `* * *`  | user                                     | save my data           | view my list from previous sessions without re-entering my list        |
-| `* *`    | user                                     | find a company by name | locate details of company without having to go through the entire list |
-| `* *`    | user who is interested in many companies | sort companies         | view the list in my preferred order                                    |
-| `* *`    | user                                     | get reminders          | ensure that I will not miss out on any applications                    |
+| Priority | As a …​                                  | I want to …​                                     | So that I can…​                                                        |
+|----------|------------------------------------------|--------------------------------------------------|------------------------------------------------------------------------|
+| `* * *`  | user                                     | add details of company                           | easily keep track of companies I am interested in                      |
+| `* * *`  | user                                     | list companies added                             | view all the companies that I am currently interested in               |
+| `* * *`  | user                                     | delete a company                                 | remove company that I am no longer interested in                       |
+| `* * *`  | user                                     | save my data                                     | view my list from previous sessions without re-entering my list        |
+| `* *`    | user                                     | find a company by name                           | locate details of company without having to go through the entire list |
+| `* *`    | user who is interested in many companies | sort companies                                   | view the list in my preferred order                                    |
+| `* *`    | user                                     | set application dates                            | easily keep track of the company's applications openings and deadlines |
+| `* *`    | user                                     | get reminders                                    | ensure that I will not miss out on any applications                    |
+| `* *`    | user                                     | mark a company as applied                        | easily identify companies that I have applied for                      |
+| `* *`    | user                                     | unmark a company as applied                      | easily undo a mistake when I marked a company as applied               |
+| `*`      | user                                     | archive companies that I have already applied to | keep my company list organized and refer to it when I need to          |
 
 *{More to be added}*
 
@@ -493,9 +594,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  User requests to add a company
-2.  InternBook shows User the company it is going to add
-3.  InternBook adds company
+1.  User requests to add a company.
+2.  InternBook shows User the company it is going to add.
+3.  InternBook adds company.
 
     Use case ends.
 
@@ -504,6 +605,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1a. The given input is invalid.
 
     * 1a1. InternBook shows an error message.
+
+      Use case ends.
+
+* 1b. The company already exists in the current InternBook.
+
+    * 1b1. InternBook shows an error message.
 
       Use case ends.
 
@@ -512,153 +619,180 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  User requests to list companies
-2.  InternBook shows User a list of companies
-3.  User requests to delete a specific company in the list
-4.  InternBook deletes the company
+1.  User requests to list companies.
+2.  InternBook shows User a list of companies.
+3.  User requests to delete a specific company in the list.
+4.  InternBook shows User the company it is going to delete.
+5.  InternBook deletes the company.
 
     Use case ends.
 
 **Extensions**
 * 2a. The list is empty.
 
-  Use case ends
+  Use case ends.
 
 * 3a. The given index is invalid.
 
     * 3a1. InternBook shows an error message.
 
-      Use case resumes at step 2.
+      Use case resumes from step 2.
 
 
 **Use case: List all companies (UC-03)**
 
 **MSS**
 
-1.  User requests to list companies
-2.  InternBook shows User a list of companies
+1.  User requests to list companies.
+2.  InternBook shows User a list of companies.
 
     Use case ends.
 
 **Extensions**
 * 2a. The list is empty.
 
-  Use case ends
+  Use case ends.
 
 
 **Use case: Sort all companies (UC-04)**
 
 **MSS**
 
-1.  User requests to list companies
-2.  InternBook shows User a list of companies
-3.  User requests to sort the list in specified order
-4.  InternBook shows User a sorted list of companies
+1.  User requests to list companies.
+2.  InternBook shows User a list of companies.
+3.  User requests to sort the list in specified order.
+4.  InternBook shows User a sorted list of companies.
 
     Use case ends.
 
 **Extensions**
 * 2a. The list is empty.
 
-  Use case ends
+  Use case ends.
+
+* 3a. The given preference is invalid.
+
+    * 3a1. InternBook shows an error message.
+
+      Use case resumes from step 2.
 
 
 **Use case: Find a company (UC-05)**
 
 **MSS**
 
-1.  User requests to list companies
-2.  InternBook shows User a list of companies
-3.  User requests to find companies that satisfies a keyword
-4.  InternBook shows User the companies satisfying the keyword
+1.  User requests to list companies.
+2.  InternBook shows User a list of companies.
+3.  User requests to find companies and tags that satisfies a keyword.
+4.  InternBook shows User the companies and tags satisfying the keyword.
 
     Use case ends.
 
 **Extensions**
 * 2a. The list is empty.
 
-  Use case ends
+  Use case ends.
 
 * 3a. There are no companies satisfying the keyword.
 
-  Use case ends
+    * 3a1. InternBook shows user an empty list.
+
+      Use case ends.
 
 
 **Use case: Mark a company (UC-06)**
 
 **MSS**
 
-1.  User requests to list companies
-2.  InternBook shows User a list of companies
-3.  User requests to mark a specific company in the list
-4.  InternBook marks the company
+1.  User requests to list companies.
+2.  InternBook shows User a list of companies.
+3.  User requests to mark a specific company in the list.
+4.  InternBook marks the company.
 
     Use case ends.
 
 **Extensions**
 * 2a. The list is empty.
 
-  Use case ends
+  Use case ends.
 
 * 3a. The given index is invalid.
 
     * 3a1. InternBook shows an error message.
 
-      Use case resumes at step 2.
+      Use case resumes from step 2.
+
+* 3b. The company at the given index is already marked.
+
+    * 3b1. InternBook shows an error message.
+
+      Use case resumes from step 2.
+
 
 **Use case: Unmark a company (UC-07)**
 
 **MSS**
 
-1.  User requests to list companies
-2.  InternBook shows User a list of companies
-3.  User requests to unmark a specific company in the list
-4.  InternBook unmarks the company
+1.  User requests to list companies.
+2.  InternBook shows User a list of companies.
+3.  User requests to unmark a specific company in the list.
+4.  InternBook unmarks the company.
 
     Use case ends.
 
 **Extensions**
 * 2a. The list is empty.
 
-  Use case ends
+  Use case ends.
 
 * 3a. The given index is invalid.
 
     * 3a1. InternBook shows an error message.
 
-      Use case resumes at step 2.
+      Use case resumes from step 2.
+
+* 3b. The company at the given index is already unmarked.
+
+    * 3b1. InternBook shows an error message.
+
+      Use case resumes from step 2.
+
 
 **Use case: Setting reminders (UC-08)**
 
-**Brief Description:** This use case outlines the steps for a user to set reminders within internBook application and manage
+**Brief Description:** This use case outlines the steps for a user to set reminders within InternBook application and manage
 their preferences regarding reminders.
 
 **Preconditions:**
-* The user has launched internBook.
+* The user has launched InternBook.
 
 **MSS**
-1. The user requests to set a reminder.
-2. internBook saves the reminder based on the user's input.
-3. The user exits internBook.
-4. At a later time, the user launches internBook again.
-5. internBook displays a separate window showing applications that needs reminder.
-6. The user requests to switch off reminders.
-7. internBook updates the user's preference to turn off reminders
 
-       Use case ends.
+1. User requests to set a reminder.
+2. InternBook saves the reminder based on the user's input.
+3. User exits InternBook.
+4. At a later time, the user launches InternBook again.
+5. InternBook displays a separate window showing applications that needs reminder.
+6. User requests to switch off reminders.
+7. InternBook updates the user's preference to turn off reminders
+
+    Use case ends.
+
 **Extensions**
-* 1a. User input is invalid
-  * 1a1. internBook shows an error message.
+* 1a. The given input is invalid.
 
-    Use case resumes at step 2
+    * 1a1. InternBook shows an error message.
+  
+        Use case resumes from step 2.
+
 
 **Use case: Edit a company (UC-09)**
 
 **MSS**
 
-1.  User requests to edit a company
-2.  InternBook shows User the company it is going to edit
-3.  InternBook edits company
+1.  User requests to edit a company.
+2.  InternBook shows User the company it is going to edit.
+3.  InternBook edits company.
 
     Use case ends.
 
@@ -668,7 +802,7 @@ their preferences regarding reminders.
 
     * 1a1. InternBook shows an error message.
 
-      Use case ends.
+        Use case ends.
 
 *{More to be added}*
 

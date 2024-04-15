@@ -16,7 +16,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 <img src="images/cocoanautz.png" width="200px">
 
 [[github](https://github.com/cocoanautz)]
-[[portfoilio](team/isaac.md)]
+[[portfoilio](team/cocoanautz.md)]
 
 - Role: Developer
 - Responsibilities: Dev Ops
@@ -26,7 +26,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 <img src="images/ajayarvind2207.png" width="200px">
 
 [[github](https://github.com/AjayArvind2207)]
-[[portfolio](team/ajay.md)]
+[[portfolio](team/AjayArvind2207.md)]
 
 - Role: Team Lead
 - Responsibilities: UI
@@ -45,7 +45,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 <img src="images/jasperng-nus.png" width="200px">
 
 [[github](https://github.com/jasperng-nus)]
-[[portfolio](team/jasper.md)]
+[[portfolio](team/jasperng-nus.md)]
 
 - Role: Developer
 - Responsibilities: Dev Ops
@@ -55,7 +55,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 <img src="images/xilef121.png" width="200px">
 
 [[github](http://github.com/xilef121)]
-[[portfolio](team/xilef121)]
+[[portfolio](team/xilef121.md)]
 
 - Role: Developer
 - Responsibilities: UI

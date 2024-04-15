@@ -8,7 +8,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Days {
     public static final String MESSAGE_CONSTRAINTS =
-            "Number of days should only contain a positive integer";
+            "Number of days should only numbers";
 
     public static final String VALIDATION_REGEX = "\\d{1,}";
     public final long numOfDays;
