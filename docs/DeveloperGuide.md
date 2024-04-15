@@ -735,10 +735,10 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: None
 
     1. Test case: `add -n ABC -e abc@abc.com -t XYZ`
-       Expected: Contact with name `ABC`, email `abc@abc.com`, tag `XYZ` is added to the bottom of the list. Details of the added contact shown in the status message. Timestamp in the status bar is updated.
+       Expected: Contact with name `ABC`, email `abc@abc.com`, tag `XYZ` is added to the bottom of the list. Details of the added contact shown in the status message. Text in the status bar is reset.
 
     1. Test case: `add -e abc@abc.com -t XYZ`
-       Expected: No company is added. Error details shown in the status message. Status bar remains the same.
+       Expected: No company is added. Error details shown in the status message. Text in the status bar is not reset.
 
     1. Other incorrect add commands to try: `add`, `add -n ABC -t XYZ`, `...` 
        Expected: Similar to previous.
@@ -750,10 +750,10 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: List all companies using the `list` command. Multiple companies in the list.
 
     1. Test case: `delete 1`
-       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Text in the status bar is reset.
 
     1. Test case: `delete 0`
-       Expected: No company is deleted. Error details shown in the status message. Status bar remains the same.
+       Expected: No company is deleted. Error details shown in the status message. Text in the status bar is not reset.
 
     1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)
        Expected: Similar to previous.
@@ -765,10 +765,10 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: List all companies using the `list` command. Multiple companies in the list.
 
     1. Test case: `edit 1 -n ABC`
-       Expected: Edits the contact at index 1 to change its name to `ABC`. Details of the edited contact shown in the status message. Timestamp in the status bar is updated.
+       Expected: Edits the contact at index 1 to change its name to `ABC`. Details of the edited contact shown in the status message. Text in the status bar is reset.
 
     1. Test case: `edit 0 -e abc@abc.com -t XYZ`
-       Expected: No company is edited. Error details shown in the status message. Status bar remains the same.
+       Expected: No company is edited. Error details shown in the status message. Text in the status bar is not reset.
 
     1. Other incorrect edit commands to try: `edit`, `edit x -n ABC`, `edit -n ABC -t XYZ`, `...` (x is an index our of range) 
        Expected: Similar to previous.
@@ -780,10 +780,10 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: List all companies using the `list` command. Multiple companies in the list.
 
     1. Test case: `find ABC`
-       Expected: Finds all contacts with either name or tag beginning with `ABC`. The number of companies found is shown in the status message. Timestamp in the status bar is updated.
+       Expected: Finds all contacts with either name or tag beginning with `ABC`. The number of companies found is shown in the status message. Text in the status bar is reset.
 
     1. Test case: `find`
-       Expected: No company is found. Error details shown in the status message. Status bar remains the same.
+       Expected: No company is found. Error details shown in the status message. Text in the status bar is not reset.
 
 ### Marking a company
 
@@ -792,10 +792,10 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: List all companies using the `list` command. Multiple companies in the list. Company you want to mark has not already been marked.
 
     1. Test case: `mark 1`
-       Expected: Marks the contact at index 1 to tick the box on its right. Details of the marked contact shown in the status message. Timestamp in the status bar is updated.
+       Expected: Marks the contact at index 1 to tick the box on its right. Details of the marked contact shown in the status message. Text in the status bar is reset.
 
     1. Test case: `mark 0`
-       Expected: No company is marked. Error details shown in the status message. Status bar remains the same.
+       Expected: No company is marked. Error details shown in the status message. Text in the status bar is not reset.
 
     1. Other incorrect mark commands to try: `mark`, `mark x`, `mark t`, `...` (x is an index our of range, t is an index which is already marked) 
        Expected: Similar to previous.
@@ -807,10 +807,10 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: List all companies using the `list` command. Multiple companies in the list. Company you want to unmark has not already been unmarked.
 
     1. Test case: `unmark 1`
-       Expected: Unmarks the contact at index 1 to remove the tick on the box on its right. Details of the unmarked contact shown in the status message. Timestamp in the status bar is updated.
+       Expected: Unmarks the contact at index 1 to remove the tick on the box on its right. Details of the unmarked contact shown in the status message. Text in the status bar is reset.
 
     1. Test case: `unmark 0`
-       Expected: No company is unmarked. Error details shown in the status message. Status bar remains the same.
+       Expected: No company is unmarked. Error details shown in the status message. Text in the status bar is not reset.
 
     1. Other incorrect unmark commands to try: `unmark`, `unmark x`, `unmark t`, `...` (x is an index our of range, t is an index which is already unmarked) 
        Expected: Similar to previous.
@@ -822,10 +822,10 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: List all companies using the `list` command. Multiple companies in the list. 
 
     1. Test case: `sort a`
-       Expected: Sorts the contacts in alphanumerical order. Successful sorting message is shown in the status message. Timestamp in the status bar is updated.
+       Expected: Sorts the contacts in alphanumerical order. Successful sorting message is shown in the status message. Text in the status bar is reset.
 
     1. Test case: `sort g`
-       Expected: No company is sorted. Error details shown in the status message. Status bar remains the same.
+       Expected: No company is sorted. Error details shown in the status message. Text in the status bar is not reset.
 
     1. Other incorrect sort commands to try: `sort`, `sort a bc`, `sort 1`, `...` 
        Expected: Similar to previous.
@@ -847,7 +847,7 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: List all companies using the `list` command. Multiple companies in the list. 
 
     1. Test case: `clear`
-       Expected: Clears all the contacts in the InternBook. Successful clear message shown in the status message. Timestamp in the status bar is updated.
+       Expected: Clears all the contacts in the InternBook. Successful clear message shown in the status message. Text in the status bar is reset.
 
 ### Exiting the InternBook
 
