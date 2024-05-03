@@ -61,6 +61,8 @@ public class CompanyCard extends UiPart<Region> {
         company.getTags().stream()
                 .sorted(Comparator.comparing(Tag::getTagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.capitalise())));
+        // Solution below inspired by
+        // https://stackoverflow.com/questions/37785689/javafx-listener-to-check-for-a-boolean-value
         applicationStatusCheckBox.selectedProperty().bind(company.checkboxIsMarked());
         // Disable the checkbox to make it unclickable
         applicationStatusCheckBox.setDisable(true);

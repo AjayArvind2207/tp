@@ -41,6 +41,8 @@ public class HelpWindow extends UiPart<Stage> {
         super(FXML, root);
         helpMessage.setText(HELP_MESSAGE);
 
+        // Solution below inspired by
+        // https://stackoverflow.com/questions/35703884/trying-to-load-a-local-page-into-javafx-webengine
         webView = new WebView();
         WebEngine webEngine = webView.getEngine();
         String userGuidePath = getClass().getResource("/html/InternBook_UserGuide.html").toExternalForm();
